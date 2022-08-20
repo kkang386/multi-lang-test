@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  ubuntu:
+    container_name: ubuntu-server
+    build:
+      context: ./containers.d/local
+      dockerfile: Dockerfile.app
+    ports:
+      - 4000:4000
+    volumes:
+      - ./shared:/opt/shared
+    networks:
+      - backend
+    environment:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+networks:
+  backend:
+volumes:
+  ubuntu-test:
