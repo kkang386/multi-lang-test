@@ -1,0 +1,99 @@
+git clone https://github.com/Shopify/turbolinks-jwt-sample-app.git
+
+test shopify cookieless demo app
+
+    4  \curl -sSL https://get.rvm.io | bash -s stable --ruby
+    5  rvm
+    6  . ~/.bashrc
+    7  rvm
+    8  source /usr/local/rvm/scripts/rvm
+    9  vim ~/.bashrc 
+   10  vis ~/.bashrc 
+   11  cat ~/.bashrc 
+   12  pico ~/.bashrc
+   13  echo "source /usr/local/rvm/scripts/rvm" >> ~/.bashrc
+   14  rvm
+   15  rvm list
+   16  rvm install ruby 3.0.2
+   17  rvm list
+   18  rvm gemset create shopify
+   19  rvm gemset list
+   20  rvm use 3.0.2@shopify
+   21  rvm gemset list
+   22  rvm install bunlder
+   23  rvm install bundler
+   24  gem
+   25  gem list
+   26  rvm gemset list
+   27  gem install bundler
+   28  ls -l
+   29  cd /var/www
+   30  cd tmp
+   31  ls -l
+   32  cd /var
+   33  ls -l
+   34  mkdir www
+   35  cd www
+   36  git
+   37  git clone https://github.com/Shopify/turbolinks-jwt-sample-app.git
+   38  ls -l
+   39  cd turbolinks-jwt-sample-app/
+   40  bundle install
+   41  rails db:migrate
+   42  ruby -v
+   43  vim Gemfile
+   44  apt search vis
+   45  apt install vis
+   46  vis Gemfile
+   47  rails db:migrate
+   48  gem install tzinfo-data
+   49  rails db:migrate
+   50  gem -g install tzinfo-data
+   51  gem @global install tzinfo-data
+   52  gem 'tzinfo-data'
+   53  bundle lock --add-platform mingw, mswin, x64_mingw, jruby
+   54  bundle lock --add-platform mingw
+   55  gem install tzinfo-data
+   56  rails db:migrate
+   57  vis Gemfile
+   58  bundle install
+	( if yarn doesn't work, remove it
+		reinstall yarn: https://stackoverflow.com/questions/46013544/yarn-install-command-error-no-such-file-or-directory-install
+	)
+	apt install npm
+	npm install -g yarn
+	/usr/local/bin/yarn install
+		if node version is below 8.10.0, upgrade nodejs
+			npm cache clean -f
+			npm install -g n
+			n 8.16.0
+		(guide: https://askubuntu.com/questions/426750/how-can-i-update-my-nodejs-to-the-latest-version)
+
+   59  rails db:migrate
+   63  rails s
+   64  vis config/webpacker.yml 
+   65  rails s
+   66  rails db:migrate
+   67  vis config/environments/development.rb
+	follow this instruciton: https://github.com/evilmartians/terraforming-rails/issues/34
+	comment out this line 'config.file_watcher = ActiveSupport::EventedFileUpdateChecker'
+   68  rails db:migrate
+
+   69 create the .env file
+   follow this guide to modify config/environments/development.rb
+      basically updating the config.hosts << "exp-kkang.ngrok.io"
+   https://stackoverflow.com/questions/53878453/upgraded-rails-to-6-getting-blocked-host-error
+
+   70 rails s -b 0.0.0.0
+
+
+failed to build
+apt-get install libsqlite3-dev
+
+set vm root password:
+https://askubuntu.com/questions/80444/how-to-set-user-passwords-using-passwd-without-a-prompt
+
+About php installation:
+https://php.watch/articles/php-84-install-upgrade-guide-debian-ubuntu
+https://phoenixnap.com/kb/install-php-on-ubuntu
+

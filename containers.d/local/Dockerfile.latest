@@ -1,0 +1,72 @@
+FROM --platform=linux/arm64  ubuntu:24.04
+#Ubuntu images: https://hub.docker.com/_/ubuntu
+#FROM --platform=linux/arm64  ubuntu:20.04
+#FROM --platform=linux/arm64v8  ubuntu:23.04
+
+# Install packages
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y \
+    curl \
+    gettext-base \
+    git \
+    libfreetype6-dev \
+    libssh2-1-dev \
+    libssl-dev \
+    libzip-dev \
+    zip \
+    iputils-ping \
+    rsync \
+#    default-jdk \
+    fontconfig \
+    build-essential \
+    liblzma-dev \
+    libsqlite3-0 \
+    software-properties-common \
+    vim \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/ssl-cert-snakeoil.key -out /etc/ssl/certs/ssl-cert-snakeoil.pem -subj "/CN=ubuntu.test.net"
+
+# Install php
+RUN LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php
+RUN apt-get update
+RUN apt-get -y install lsb-release ca-certificates apt-transport-https
+RUN curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb
+RUN dpkg -i /tmp/debsuryorg-archive-keyring.deb
+RUN sh -c 'echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list'
+#RUN apt-get update
+RUN apt -y install php8.4-fpm php8.4-cli 
+RUN apt -y install php8.4-bcmath php8.4-bz2 php8.4-curl php8.4-gd php8.4-gmp php8.4-intl php8.4-mbstring php8.4-opcache php8.4-readline php8.4-xml php8.4-zip php8.4-xdebug
+# php8.4-opcache php8.4-realine php8.4-xml php8.4-zip php8.4-xdebug
+#RUN apt -y install php8.4-{bcmath,bz2,curl,gd,gmp,intl,mbstring,opcache,readline,xml,zip,xdebug}
+
+# use this to generate the password:  openssl passwd -1  -salt 5RPVAd clear-text-passwd43
+# use this to set the root password: usermod -p 'the-generated-password' root
+RUN usermod -p '$1$abcd$72b67dOBKIxGU9Df4wwv61' root # root passwd: Abcd1234
+USER ubuntu
+WORKDIR /home/ubuntu
+SHELL ["/bin/bash", "--login", "-c"]
+
+# install python and jupyter-lab
+RUN curl https://pyenv.run | bash
+COPY system-root/home/ubuntu/.bashrc /home/ubuntu/.bashrc 
+RUN . /home/ubuntu/.bashrc
+RUN /home/ubuntu/.pyenv/bin/pyenv install -v 3.12.1 && /home/ubuntu/.pyenv/bin/pyenv global 3.12.1
+RUN /home/ubuntu/.pyenv/shims/pip install --upgrade pip
+RUN /home/ubuntu/.pyenv/shims/pip install jupyterlab pandas otter-grader ipympl seaborn plotly cufflinks kagglehub scikit-learn nltk spacy gdown vaderSentiment
+
+ENV NVM_DIR /home/ubuntu/.nvm
+# install php
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash &> /dev/null \
+    && . $NVM_DIR/nvm.sh \
+    && nvm install --lts \
+    && nvm install v20.18.1 \
+    && nvm use v20.18.1
+
+
+ENTRYPOINT ["tail"]
+CMD ["-f", "/dev/null"]
+
+
+#SHELL ["/bin/bash", "-c"]
