@@ -4,6 +4,7 @@ FROM --platform=linux/arm64  ubuntu:24.04
 #FROM --platform=linux/arm64v8  ubuntu:23.04
 
 # Install packages
+RUN apt-get clean
 RUN apt-get update \
     && apt-get upgrade -y \
     && apt-get install -y \
@@ -28,6 +29,8 @@ RUN apt-get update \
 
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/ssl-cert-snakeoil.key -out /etc/ssl/certs/ssl-cert-snakeoil.pem -subj "/CN=ubuntu.test.net"
 
+#RUN apt-get -y install libsqlite3-0  software-properties-common
+
 # Install php
 RUN LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php
 RUN apt-get update
@@ -41,29 +44,44 @@ RUN apt -y install php8.4-bcmath php8.4-bz2 php8.4-curl php8.4-gd php8.4-gmp php
 # php8.4-opcache php8.4-realine php8.4-xml php8.4-zip php8.4-xdebug
 #RUN apt -y install php8.4-{bcmath,bz2,curl,gd,gmp,intl,mbstring,opcache,readline,xml,zip,xdebug}
 
+# install java 
+RUN apt -y install openjdk-21-jdk maven gradle
+
+
 # use this to generate the password:  openssl passwd -1  -salt 5RPVAd clear-text-passwd43
 # use this to set the root password: usermod -p 'the-generated-password' root
 RUN usermod -p '$1$abcd$72b67dOBKIxGU9Df4wwv61' root # root passwd: Abcd1234
+COPY system-root/home/ubuntu/.bashrc /home/ubuntu/.bashrc 
+COPY system-root/home/ubuntu/.vimrc /home/ubuntu/.vimrc
+RUN chown -R ubuntu:ubuntu /home/ubuntu
+
 USER ubuntu
 WORKDIR /home/ubuntu
 SHELL ["/bin/bash", "--login", "-c"]
 
 # install python and jupyter-lab
 RUN curl https://pyenv.run | bash
-COPY system-root/home/ubuntu/.bashrc /home/ubuntu/.bashrc 
 RUN . /home/ubuntu/.bashrc
 RUN /home/ubuntu/.pyenv/bin/pyenv install -v 3.12.1 && /home/ubuntu/.pyenv/bin/pyenv global 3.12.1
 RUN /home/ubuntu/.pyenv/shims/pip install --upgrade pip
 RUN /home/ubuntu/.pyenv/shims/pip install jupyterlab pandas otter-grader ipympl seaborn plotly cufflinks kagglehub scikit-learn nltk spacy gdown vaderSentiment
 
+# install nodejs and nvm
 ENV NVM_DIR /home/ubuntu/.nvm
-# install php
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash &> /dev/null \
     && . $NVM_DIR/nvm.sh \
     && nvm install --lts \
     && nvm install v20.18.1 \
     && nvm use v20.18.1
 
+# install java env manager and java
+# RUN git clone https://github.com/jenv/jenv.git /home/ubuntu/.jenv
+# RUN 'eval "$(/home/ubuntu/.jenv/bin/jenv init -)"'
+
+# install spring-boot to: /home/ubuntu/.sdkman/candidates/springboot/current/bin/
+RUN curl -s https://get.sdkman.io | bash
+RUN source "/home/ubuntu/.sdkman/bin/sdkman-init.sh" && sdk install springboot
+# RUN spring --version
 
 ENTRYPOINT ["tail"]
 CMD ["-f", "/dev/null"]

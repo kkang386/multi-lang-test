@@ -11,8 +11,9 @@ services:
       - 8005:8005
         #- 8080:8080
     volumes:
-      - ./system-root/root:/root
+      # - ./system-root/root:/root
       # - ./system-root/home/ubuntu:/home/ubuntu
+      - ./system-root/home/ubuntu/dev:/home/ubuntu/dev
       - ./system-root/var/www:/var/www
       - ./shared:/opt/shared
     networks:
