@@ -63,8 +63,8 @@ SHELL ["/bin/bash", "--login", "-c"]
 RUN curl https://pyenv.run | bash
 RUN . /home/ubuntu/.bashrc
 RUN /home/ubuntu/.pyenv/bin/pyenv install -v 3.12.1 && /home/ubuntu/.pyenv/bin/pyenv global 3.12.1
-RUN /home/ubuntu/.pyenv/shims/pip install --upgrade pip
-RUN /home/ubuntu/.pyenv/shims/pip install jupyterlab pandas otter-grader ipympl seaborn plotly cufflinks kagglehub scikit-learn nltk spacy gdown vaderSentiment
+RUN /home/ubuntu/.pyenv/shims/pip install --upgrade pip && /home/ubuntu/.pyenv/shims/pip install -U pip setuptools wheel
+RUN /home/ubuntu/.pyenv/shims/pip install -U jupyterlab pandas otter-grader ipympl seaborn plotly cufflinks kagglehub scikit-learn nltk gdown vaderSentiment # spacy
 
 # install nodejs and nvm
 ENV NVM_DIR /home/ubuntu/.nvm
