@@ -27,6 +27,8 @@ RUN apt-get update \
     pkg-config \
     libffi-dev \
     libghc-libffi-dev \
+    mysql-client\
+    libsqlite3-dev\
     vim \
     && rm -rf /var/lib/apt/lists/*
 
@@ -70,10 +72,10 @@ RUN . /home/ubuntu/.bashrc
 RUN /home/ubuntu/.pyenv/bin/pyenv install -v 3.12.1 && /home/ubuntu/.pyenv/bin/pyenv global 3.12.1
 RUN /home/ubuntu/.pyenv/shims/pip install --upgrade pip && /home/ubuntu/.pyenv/shims/pip install -U pip setuptools wheel
 RUN /home/ubuntu/.pyenv/shims/pip install -U jupyterlab pandas otter-grader ipympl seaborn plotly cufflinks kagglehub scikit-learn nltk gdown vaderSentiment spacy \
-    mysqlclient pyspark tensorflow xgboost returns pip-tools pipreqs
+    mysqlclient pyspark tensorflow xgboost returns pip-tools pipreqs django
 
 RUN /home/ubuntu/.pyenv/shims/python -m spacy download en_core_web_sm
-RUN /home/ubuntu/.pyenv/shims/pip install pipenv; /home/ubuntu/.pyenv/shims/pipenv install django
+# RUN /home/ubuntu/.pyenv/shims/pip install pipenv; /home/ubuntu/.pyenv/shims/pipenv install django
 
 # install nodejs and nvm
 ENV NVM_DIR /home/ubuntu/.nvm

@@ -18,10 +18,11 @@ services:
       - ./system-root/var/www:/var/www
       - ./shared:/opt/shared
     networks:
-      - backend
+      - dev_net
     extra_hosts:
       - "host.docker.internal:host-gateway"
 networks:
-  backend:
+  dev_net:
+    external: true
 volumes:
   ubuntu-test:
