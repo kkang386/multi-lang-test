@@ -6,7 +6,6 @@ FROM --platform=linux/arm64  ubuntu:24.04
 # Install packages
 RUN apt-get clean
 RUN apt-get update \
-    && apt-get upgrade -y \
     && apt-get install -y \
     curl \
     gettext-base \
@@ -24,8 +23,14 @@ RUN apt-get update \
     liblzma-dev \
     libsqlite3-0 \
     software-properties-common \
+    default-libmysqlclient-dev \
+    pkg-config \
+    libffi-dev \
+    libghc-libffi-dev \
     vim \
     && rm -rf /var/lib/apt/lists/*
+
+# RUN apt-get upgrade -y
 
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/ssl-cert-snakeoil.key -out /etc/ssl/certs/ssl-cert-snakeoil.pem -subj "/CN=ubuntu.test.net"
 
@@ -64,7 +69,11 @@ RUN curl https://pyenv.run | bash
 RUN . /home/ubuntu/.bashrc
 RUN /home/ubuntu/.pyenv/bin/pyenv install -v 3.12.1 && /home/ubuntu/.pyenv/bin/pyenv global 3.12.1
 RUN /home/ubuntu/.pyenv/shims/pip install --upgrade pip && /home/ubuntu/.pyenv/shims/pip install -U pip setuptools wheel
-RUN /home/ubuntu/.pyenv/shims/pip install -U jupyterlab pandas otter-grader ipympl seaborn plotly cufflinks kagglehub scikit-learn nltk gdown vaderSentiment # spacy
+RUN /home/ubuntu/.pyenv/shims/pip install -U jupyterlab pandas otter-grader ipympl seaborn plotly cufflinks kagglehub scikit-learn nltk gdown vaderSentiment spacy \
+    mysqlclient pyspark tensorflow xgboost returns pip-tools pipreqs
+
+RUN /home/ubuntu/.pyenv/shims/python -m spacy download en_core_web_sm
+RUN /home/ubuntu/.pyenv/shims/pip install pipenv; /home/ubuntu/.pyenv/shims/pipenv install django
 
 # install nodejs and nvm
 ENV NVM_DIR /home/ubuntu/.nvm
